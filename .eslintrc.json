@@ -34,6 +34,46 @@
             }
         ],
         "react/jsx-uses-react": "off",
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "array-bracket-spacing": [
+            "error", 
+            "always", 
+            { "singleValue": false }
+        ],
+        "prefer-const": "error",
+        "no-nested-ternary": "error",
+        "no-multi-str": "error",
+        "no-duplicate-imports": "error",
+        "brace-style": [
+            "error", 
+            "1tbs", 
+            { "allowSingleLine": true }
+        ],
+        "comma-style": [
+            "error", 
+            "last"
+        ],
+        "jsx-quotes": [
+            "error", 
+            "prefer-single"
+        ],
+        "newline-per-chained-call": [
+            "error", 
+            { "ignoreChainWithDepth": 2 }
+        ],
+        "no-trailing-spaces": [
+            "error", 
+            { "ignoreComments": true }
+        ],
+        "no-empty-function": "error",
+        "arrow-parens": "error",
+        "arrow-spacing": "error",
+        "no-ex-assign": "error",
+        "no-empty-pattern": "error",
+        "no-func-assign": "error",
+        "default-case-last": "error",
+        "eqeqeq": "error",
+        "no-eq-null": "error",
+        "no-var": "error"
     }
 }

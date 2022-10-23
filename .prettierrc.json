@@ -3,5 +3,9 @@
     "tabWidth": 4,
     "singleQuote": true,
     "arrowParens": "always",
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "jsxSingleQuote": true,
+    "semi": true,
+    "bracketSpacing": true,
+    "singleAttributePerLine": true
 }

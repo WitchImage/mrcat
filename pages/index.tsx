@@ -1,7 +1,23 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useEffect } from 'react';
+import { request } from '../src/services/api/request';
 
 const Home: NextPage = () => {
+    interface Ditto {
+        name: string;
+    }
+
+    useEffect(() => {
+        const getDitto = async () => {
+            const response = await request<Ditto>('get', {
+                url: 'pokemon/ditto',
+            });
+            console.log(response.data);
+        };
+        getDitto();
+    }, []);
+
     return (
         <div>
             <Head>

@@ -1,16 +1,23 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { requestApi } from '../services/api/request';
+import { requestApi } from '../services/request/request';
 
-interface Body {
+type Body = {
     [item: string]: unknown;
-}
+};
 
-interface Request {
+type Request = {
     url: string;
-    title: string;
     queryParams?: object | URLSearchParams;
     body?: Body;
-}
+};
+
+type HttpMethods<T> = {
+    get: Promise<Response<T>>;
+    delete: Promise<Response<T>>;
+    post: Promise<Response<T>>;
+    put: Promise<Response<T>>;
+    patch: Promise<Response<T>>;
+};
 
 type Error = {
     msg: string;
@@ -60,13 +67,13 @@ const useRequest = () => {
     async function getRequest<T>(request: Request): Promise<Response<T>> {
         config.params = request.queryParams;
 
-        const response: Response<T> = {
+        let response: Response<T> = {
             status: 0,
             data: {} as T,
             error: {} as Error,
         };
 
-        requestApi
+        await requestApi
             .get(request.url, config)
             .then((success: AxiosResponse) =>
                 processSuccessResponse<T>(response, success)

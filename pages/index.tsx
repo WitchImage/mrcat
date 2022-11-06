@@ -1,22 +1,23 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { request } from '../src/services/api/request';
+import { useEffect, useState } from 'react';
+import { request } from '../src/services/request/request';
 
 const Home: NextPage = () => {
-    interface Ditto {
+    const [click, setClick] = useState(false);
+    type Ditto = {
         name: string;
-    }
+    };
 
     useEffect(() => {
         const getDitto = async () => {
             const response = await request<Ditto>('get', {
                 url: 'pokemon/ditto',
             });
-            console.log(response.data);
+            console.log('hola', response.data?.name);
         };
         getDitto();
-    }, []);
+    }, [click]);
 
     return (
         <div>
@@ -27,6 +28,7 @@ const Home: NextPage = () => {
                 <h1 className='text-npink'>MrCat</h1>
                 <h2 className='text-npurple-300'>MrCat</h2>
                 <h5 className='text-nblue-300'>MrCat</h5>
+                <button onClick={() => setClick(!click)}>Click</button>
             </div>
         </div>
     );

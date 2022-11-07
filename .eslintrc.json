@@ -38,7 +38,8 @@
         "array-bracket-spacing": [
             "error", 
             "always", 
-            { "singleValue": false }
+            { "singleValue": false },
+            {"objectsInArrays": false}
         ],
         "prefer-const": "error",
         "no-nested-ternary": "error",
@@ -47,7 +48,9 @@
         "brace-style": [
             "error", 
             "1tbs", 
-            { "allowSingleLine": true }
+            {
+                "allowSingleLine": true
+            }
         ],
         "comma-style": [
             "error", 

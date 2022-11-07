@@ -1,22 +1,22 @@
 import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
 
-interface Body {
+type Body = {
     [item: string]: unknown;
-}
+};
 
-interface Request {
+type Request = {
     url: string;
     queryParams?: object | URLSearchParams;
     body?: Body;
-}
+};
 
-interface HttpMethods<T> {
+type HttpMethods<T> = {
     get: Promise<Response<T>>;
     delete: Promise<Response<T>>;
     post: Promise<Response<T>>;
     put: Promise<Response<T>>;
     patch: Promise<Response<T>>;
-}
+};
 
 type Error = {
     msg: string;
@@ -34,12 +34,12 @@ type RequestConfig = {
     headers: object;
 };
 
-const _requestConfig: RequestConfig = {
+const requestConfig: RequestConfig = {
     params: {},
     headers: {},
 };
 
-function _processSuccessResponse<T>(
+function processSuccessResponse<T>(
     response: Response<T>,
     axiosResponse: AxiosResponse
 ): void {
@@ -47,7 +47,7 @@ function _processSuccessResponse<T>(
     response.data = axiosResponse.data;
 }
 
-function _processErrorResponse<T>(
+function processErrorResponse<T>(
     response: Response<T>,
     axiosError: AxiosError
 ): void {
@@ -58,7 +58,7 @@ function _processErrorResponse<T>(
     };
 }
 
-async function _getRequest<T>(
+async function getRequest<T>(
     url: string,
     requestConfig: RequestConfig
 ): Promise<Response<T>> {
@@ -68,18 +68,17 @@ async function _getRequest<T>(
         error: {} as Error,
     };
 
-    requestApi
+    await requestApi
         .get(url, requestConfig)
         .then((success: AxiosResponse) =>
-            _processSuccessResponse<T>(response, success)
+            processSuccessResponse<T>(response, success)
         )
-        .catch((error: AxiosError) => _processErrorResponse(response, error));
+        .catch((error: AxiosError) => processErrorResponse(response, error));
 
-    console.log(response);
     return response;
 }
 
-async function _deleteRequest<T>(
+async function deleteRequest<T>(
     url: string,
     requestConfig: RequestConfig
 ): Promise<Response<T>> {
@@ -89,17 +88,17 @@ async function _deleteRequest<T>(
         error: {} as Error,
     };
 
-    requestApi
+    await requestApi
         .delete(url, requestConfig)
         .then((success: AxiosResponse) =>
-            _processSuccessResponse<T>(response, success)
+            processSuccessResponse<T>(response, success)
         )
-        .catch((error: AxiosError) => _processErrorResponse(response, error));
+        .catch((error: AxiosError) => processErrorResponse(response, error));
 
     return response;
 }
 
-async function _postRequest<T>(
+async function postRequest<T>(
     url: string,
     body: Body,
     requestConfig: RequestConfig
@@ -110,17 +109,17 @@ async function _postRequest<T>(
         error: {} as Error,
     };
 
-    requestApi
+    await requestApi
         .post(url, body, requestConfig)
         .then((success: AxiosResponse) =>
-            _processSuccessResponse<T>(response, success)
+            processSuccessResponse<T>(response, success)
         )
-        .catch((error: AxiosError) => _processErrorResponse(response, error));
+        .catch((error: AxiosError) => processErrorResponse(response, error));
 
     return response;
 }
 
-async function _putRequest<T>(
+async function putRequest<T>(
     url: string,
     body: Body,
     requestConfig: RequestConfig
@@ -131,17 +130,17 @@ async function _putRequest<T>(
         error: {} as Error,
     };
 
-    requestApi
+    await requestApi
         .put(url, body, requestConfig)
         .then((success: AxiosResponse) =>
-            _processSuccessResponse<T>(response, success)
+            processSuccessResponse<T>(response, success)
         )
-        .catch((error: AxiosError) => _processErrorResponse(response, error));
+        .catch((error: AxiosError) => processErrorResponse(response, error));
 
     return response;
 }
 
-async function _patchRequest<T>(
+async function patchRequest<T>(
     url: string,
     body: Body,
     requestConfig: RequestConfig
@@ -152,12 +151,12 @@ async function _patchRequest<T>(
         error: {} as Error,
     };
 
-    requestApi
+    await requestApi
         .patch(url, body, requestConfig)
         .then((success: AxiosResponse) =>
-            _processSuccessResponse<T>(response, success)
+            processSuccessResponse<T>(response, success)
         )
-        .catch((error: AxiosError) => _processErrorResponse(response, error));
+        .catch((error: AxiosError) => processErrorResponse(response, error));
 
     return response;
 }
@@ -174,17 +173,49 @@ export async function request<T>(
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     request: Request
 ): Promise<Response<T>> {
-    _requestConfig.params = request.queryParams;
-    const methods: HttpMethods<T> = {
-        get: _getRequest<T>(request.url, _requestConfig),
-        delete: _deleteRequest<T>(request.url, _requestConfig),
-        post: _postRequest<T>(request.url, request.body ?? {}, _requestConfig),
-        put: _putRequest<T>(request.url, request.body ?? {}, _requestConfig),
-        patch: _patchRequest<T>(
-            request.url,
-            request.body ?? {},
-            _requestConfig
-        ),
+    requestConfig.params = request.queryParams;
+
+    const emptyResponse: Response<T> = {
+        status: 0,
+        data: {} as T,
+        error: {} as Error,
     };
-    return methods[method];
+
+    switch (method) {
+        case 'delete':
+            return await deleteRequest<T>(request.url, requestConfig);
+        case 'get':
+            return await getRequest<T>(request.url, requestConfig);
+        case 'patch':
+            return await patchRequest<T>(
+                request.url,
+                request.body ?? {},
+                requestConfig
+            );
+        case 'post':
+            return await postRequest<T>(
+                request.url,
+                request.body ?? {},
+                requestConfig
+            );
+        case 'put':
+            return await putRequest<T>(
+                request.url,
+                request.body ?? {},
+                requestConfig
+            );
+        default:
+            console.log('method does not exists');
+    }
+    return emptyResponse;
+
+    // const methods: HttpMethods<T> = {
+    //     get: getRequest<T>(request.url, requestConfig),
+    //     delete: deleteRequest<T>(request.url, requestConfig),
+    //     post: postRequest<T>(request.url, request.body ?? {}, requestConfig),
+    //     put: putRequest<T>(request.url, request.body ?? {}, requestConfig),
+    //     patch: patchRequest<T>(request.url, request.body ?? {}, requestConfig),
+    // };
+    // const response = methods[method];
+    // return response;
 }

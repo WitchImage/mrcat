@@ -12,14 +12,18 @@
     "dependencies": {
         "@fast-csv/format": "^4.3.5",
         "@fast-csv/parse": "^4.3.6",
+        "@headlessui/react": "^1.7.4",
         "@typescript-eslint/eslint-plugin": "^5.40.0",
         "@typescript-eslint/parser": "^5.40.0",
         "axios": "^1.1.2",
         "eslint-plugin-react": "^7.31.9",
         "fast-csv": "^4.3.6",
+        "formik": "^2.2.9",
         "next": "12.3.1",
         "react": "18.2.0",
-        "react-dom": "18.2.0"
+        "react-dom": "18.2.0",
+        "react-icons": "^4.6.0",
+        "yup": "^0.32.11"
     },
     "devDependencies": {
         "@types/node": "18.8.4",

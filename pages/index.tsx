@@ -1,9 +1,10 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { request } from '../src/services/request/request';
+import { request } from '../src/lib/request/request';
 import { Popover, Transition } from '@headlessui/react';
 import { FiChevronDown } from 'react-icons/fi';
+import addNotification from '../src/utils/addNotification';
 
 const Home: NextPage = () => {
     const [click, setClick] = useState(false);
@@ -35,7 +36,10 @@ const Home: NextPage = () => {
                 <Popover className='relative'>
                     {({ open }) => (
                         <>
-                            <Popover.Button className='p-2 flex items-center gap-4 bg-npink-300 outline-none rounded-lg font-medium'>
+                            <Popover.Button
+                                className='p-2 flex items-center gap-4 bg-npink-300 outline-none rounded-lg font-medium'
+                                onClick={() => addNotification('Hello world!')}
+                            >
                                 Solutions
                                 <FiChevronDown
                                     className={`transition-transform ${

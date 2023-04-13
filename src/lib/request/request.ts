@@ -1,38 +1,6 @@
 import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
-
-type Body = {
-    [item: string]: unknown;
-};
-
-type Request = {
-    url: string;
-    queryParams?: object | URLSearchParams;
-    body?: Body;
-};
-
-type HttpMethods<T> = {
-    get: Promise<Response<T>>;
-    delete: Promise<Response<T>>;
-    post: Promise<Response<T>>;
-    put: Promise<Response<T>>;
-    patch: Promise<Response<T>>;
-};
-
-type Error = {
-    msg: string;
-    code: string;
-};
-
-type Response<T> = {
-    status: number;
-    data?: T;
-    error: Error;
-};
-
-type RequestConfig = {
-    params: object | URLSearchParams | undefined;
-    headers: object;
-};
+import addNotification from '../../utils/addNotification';
+import { Request, RequestConfig, Body, Error, Response } from './requestTypes';
 
 const requestConfig: RequestConfig = {
     params: {},
@@ -169,6 +137,14 @@ export const requestApi: AxiosInstance = axios.create({
     },
 });
 
+export const serverlessRequest: AxiosInstance = axios.create({
+    baseURL: `/api/`,
+    headers: {
+        'Content-type': 'multipart/form-data; charset=UTF-8',
+        api_key: process.env.NEXT_PUBLIC_API_KEY,
+    },
+});
+
 export async function request<T>(
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     request: Request
@@ -205,7 +181,7 @@ export async function request<T>(
                 requestConfig
             );
         default:
-            console.log('method does not exists');
+            addNotification(`Method ${method} does not exist`);
     }
     return emptyResponse;
 

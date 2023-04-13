@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { requestApi } from '../services/request/request';
+import { requestApi } from '../lib/request/request';
 
 type Body = {
     [item: string]: unknown;
